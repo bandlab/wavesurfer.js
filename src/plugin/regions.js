@@ -34,6 +34,10 @@ class Region {
 
         this.maxLength = params.maxLength;
         this.minLength = params.minLength;
+        this.regionHighlight =
+            params.regionHighlight === undefined
+                ? false
+                : Boolean(params.regionHighlight);
         this._onRedraw = () => this.updateRender();
 
         this.scroll = params.scroll !== false && ws.params.scrollParent;
@@ -79,6 +83,9 @@ class Region {
         if (null != params.attributes) {
             this.attributes = params.attributes;
         }
+        if (null != params.regionHighlight) {
+            this.regionHighlight = Boolean(params.regionHighlight);
+        }
 
         this.updateRender();
         this.fireEvent('update');
@@ -94,6 +101,11 @@ class Region {
             this.wavesurfer.un('zoom', this._onRedraw);
             this.wavesurfer.un('redraw', this._onRedraw);
             this.wavesurfer.fireEvent('region-removed', this);
+        }
+        if (this.highlight) {
+            this.wrapper.removeChild(this.highlight);
+            this.highlightCanvas = null;
+            this.highlight = null;
         }
     }
 
@@ -157,6 +169,41 @@ class Region {
             this.style(handleRight, {
                 right: '0px'
             });
+        }
+        if (this.regionHighlight) {
+            const origWave = this.wrapper.querySelector('wave canvas');
+
+            const wave = origWave.cloneNode();
+
+            const highlightCanvas = wave.getContext('2d');
+            highlightCanvas.drawImage(origWave, 0, 0);
+            highlightCanvas.fillStyle = this.wavesurfer.params.progressColor;
+            highlightCanvas.globalCompositeOperation = 'source-in';
+            highlightCanvas.fillRect(0, 0, wave.width, wave.height);
+
+            this.style(this.wrapper.querySelector('wave wave canvas'), {
+                display: 'none'
+            });
+
+            const highlightEl = document.createElement('highlight');
+            highlightEl.setAttribute('data-id', this.id);
+            highlightEl.className = 'wavesurfer-region-highlight';
+            highlightEl.appendChild(wave);
+
+            this.style(highlightEl, {
+                position: 'absolute',
+                zIndex: 2,
+                left: '0px',
+                top: '0px',
+                bottom: '0px',
+                overflow: 'hidden',
+                width: '0',
+                display: 'block',
+                boxSizing: 'border-box'
+            });
+
+            this.highlight = this.wrapper.appendChild(highlightEl);
+            this.highlightCanvas = wave;
         }
 
         this.element = this.wrapper.appendChild(regionEl);
@@ -222,6 +269,17 @@ class Region {
                     'data-region-' + attrname,
                     this.attributes[attrname]
                 );
+            }
+
+            if (this.regionHighlight) {
+                this.style(this.highlight, {
+                    left: left + 'px',
+                    width: ~~(((this.end - this.start) / dur) * width) + 'px'
+                });
+
+                this.style(this.highlightCanvas, {
+                    left: -left + 'px'
+                });
             }
 
             this.element.title = this.formatTime(this.start, this.end);
