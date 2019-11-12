@@ -142,6 +142,10 @@ class Region {
             height: '100%',
             top: '0px'
         });
+        const startTime = `<span id="startTime">${this.start}</span>`;
+        const endTime = `<span id="endTime">${this.end}</span>`;
+        regionEl.insertAdjacentHTML('beforeend', startTime);
+        regionEl.insertAdjacentHTML('beforeend', endTime);
 
         /* Resize handles */
         if (this.resize) {
@@ -177,7 +181,7 @@ class Region {
 
             const highlightCanvas = wave.getContext('2d');
             highlightCanvas.drawImage(origWave, 0, 0);
-            highlightCanvas.fillStyle = this.wavesurfer.params.progressColor;
+            highlightCanvas.fillStyle = this.wavesurfer.getProgressColor();
             highlightCanvas.globalCompositeOperation = 'source-in';
             highlightCanvas.fillRect(0, 0, wave.width, wave.height);
 
@@ -281,7 +285,20 @@ class Region {
                     left: -left + 'px'
                 });
             }
-
+            const startTime = document.getElementById('startTime');
+            startTime.innerHTML = `${Math.floor((this.start % 3600) / 60)}:${(
+                '00' + Math.floor(this.start % 60)
+            ).slice(-2)}`;
+            startTime.style.cssText =
+                'position: absolute;top: -20px;left: -10px;';
+            startTime.className = 'region-time-indicator';
+            const endTime = document.getElementById('endTime');
+            endTime.innerHTML = `${Math.floor((this.end % 3600) / 60)}:${(
+                '00' + Math.floor(this.end % 60)
+            ).slice(-2)}`;
+            endTime.style.cssText =
+                'position: absolute;top: -20px;right: -10px;';
+            endTime.className = 'region-time-indicator';
             this.element.title = this.formatTime(this.start, this.end);
         }
     }

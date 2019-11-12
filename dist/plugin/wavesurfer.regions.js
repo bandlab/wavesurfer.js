@@ -1,5 +1,5 @@
 /*!
- * wavesurfer.js regions plugin 3.1.0 (2019-10-25)
+ * wavesurfer.js regions plugin 3.1.0 (2019-11-12)
  * https://github.com/katspaugh/wavesurfer.js
  * @license BSD-3-Clause
  */
@@ -287,6 +287,10 @@ function () {
         height: '100%',
         top: '0px'
       });
+      var startTime = "<span id=\"startTime\">".concat(this.start, "</span>");
+      var endTime = "<span id=\"endTime\">".concat(this.end, "</span>");
+      regionEl.insertAdjacentHTML('beforeend', startTime);
+      regionEl.insertAdjacentHTML('beforeend', endTime);
       /* Resize handles */
 
       if (this.resize) {
@@ -317,7 +321,7 @@ function () {
         var wave = origWave.cloneNode();
         var highlightCanvas = wave.getContext('2d');
         highlightCanvas.drawImage(origWave, 0, 0);
-        highlightCanvas.fillStyle = this.wavesurfer.params.progressColor;
+        highlightCanvas.fillStyle = this.wavesurfer.getProgressColor();
         highlightCanvas.globalCompositeOperation = 'source-in';
         highlightCanvas.fillRect(0, 0, wave.width, wave.height);
         this.style(this.wrapper.querySelector('wave wave canvas'), {
@@ -415,6 +419,14 @@ function () {
           });
         }
 
+        var startTime = document.getElementById('startTime');
+        startTime.innerHTML = "".concat(Math.floor(this.start % 3600 / 60), ":").concat(('00' + Math.floor(this.start % 60)).slice(-2));
+        startTime.style.cssText = 'position: absolute;top: -20px;left: -10px;';
+        startTime.className = 'region-time-indicator';
+        var endTime = document.getElementById('endTime');
+        endTime.innerHTML = "".concat(Math.floor(this.end % 3600 / 60), ":").concat(('00' + Math.floor(this.end % 60)).slice(-2));
+        endTime.style.cssText = 'position: absolute;top: -20px;right: -10px;';
+        endTime.className = 'region-time-indicator';
         this.element.title = this.formatTime(this.start, this.end);
       }
     }
