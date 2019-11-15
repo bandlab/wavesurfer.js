@@ -38,6 +38,10 @@ class Region {
             params.regionHighlight === undefined
                 ? false
                 : Boolean(params.regionHighlight);
+        this.regionTimestamp =
+            params.regionTimestamp === undefined
+                ? false
+                : Boolean(params.regionTimestamp);
         this._onRedraw = () => this.updateRender();
 
         this.scroll = params.scroll !== false && ws.params.scrollParent;
@@ -285,21 +289,23 @@ class Region {
                     left: -left + 'px'
                 });
             }
-            const startTime = document.getElementById('startTime');
-            startTime.innerHTML = `${Math.floor((this.start % 3600) / 60)}:${(
-                '00' + Math.floor(this.start % 60)
-            ).slice(-2)}`;
-            startTime.style.cssText =
-                'position: absolute;top: -20px;left: -10px;';
-            startTime.className = 'region-time-indicator';
-            const endTime = document.getElementById('endTime');
-            endTime.innerHTML = `${Math.floor((this.end % 3600) / 60)}:${(
-                '00' + Math.floor(this.end % 60)
-            ).slice(-2)}`;
-            endTime.style.cssText =
-                'position: absolute;top: -20px;right: -10px;';
-            endTime.className = 'region-time-indicator';
-            this.element.title = this.formatTime(this.start, this.end);
+            if (this.regionTimestamp) {
+                const startTime = document.getElementById('startTime');
+                startTime.innerHTML = `${Math.floor(
+                    (this.start % 3600) / 60
+                )}:${('00' + Math.floor(this.start % 60)).slice(-2)}`;
+                startTime.style.cssText =
+                    'position: absolute;top: -20px;left: -10px;';
+                startTime.className = 'region-time-indicator';
+                const endTime = document.getElementById('endTime');
+                endTime.innerHTML = `${Math.floor((this.end % 3600) / 60)}:${(
+                    '00' + Math.floor(this.end % 60)
+                ).slice(-2)}`;
+                endTime.style.cssText =
+                    'position: absolute;top: -20px;right: -10px;';
+                endTime.className = 'region-time-indicator';
+                this.element.title = this.formatTime(this.start, this.end);
+            }
         }
     }
 

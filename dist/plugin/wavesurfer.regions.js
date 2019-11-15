@@ -1,5 +1,5 @@
 /*!
- * wavesurfer.js regions plugin 3.1.0 (2019-11-12)
+ * wavesurfer.js regions plugin 3.1.0 (2019-11-15)
  * https://github.com/katspaugh/wavesurfer.js
  * @license BSD-3-Clause
  */
@@ -158,6 +158,7 @@ function () {
     this.maxLength = params.maxLength;
     this.minLength = params.minLength;
     this.regionHighlight = params.regionHighlight === undefined ? false : Boolean(params.regionHighlight);
+    this.regionTimestamp = params.regionTimestamp === undefined ? false : Boolean(params.regionTimestamp);
 
     this._onRedraw = function () {
       return _this.updateRender();
@@ -419,15 +420,17 @@ function () {
           });
         }
 
-        var startTime = document.getElementById('startTime');
-        startTime.innerHTML = "".concat(Math.floor(this.start % 3600 / 60), ":").concat(('00' + Math.floor(this.start % 60)).slice(-2));
-        startTime.style.cssText = 'position: absolute;top: -20px;left: -10px;';
-        startTime.className = 'region-time-indicator';
-        var endTime = document.getElementById('endTime');
-        endTime.innerHTML = "".concat(Math.floor(this.end % 3600 / 60), ":").concat(('00' + Math.floor(this.end % 60)).slice(-2));
-        endTime.style.cssText = 'position: absolute;top: -20px;right: -10px;';
-        endTime.className = 'region-time-indicator';
-        this.element.title = this.formatTime(this.start, this.end);
+        if (this.regionTimestamp) {
+          var startTime = document.getElementById('startTime');
+          startTime.innerHTML = "".concat(Math.floor(this.start % 3600 / 60), ":").concat(('00' + Math.floor(this.start % 60)).slice(-2));
+          startTime.style.cssText = 'position: absolute;top: -20px;left: -10px;';
+          startTime.className = 'region-time-indicator';
+          var endTime = document.getElementById('endTime');
+          endTime.innerHTML = "".concat(Math.floor(this.end % 3600 / 60), ":").concat(('00' + Math.floor(this.end % 60)).slice(-2));
+          endTime.style.cssText = 'position: absolute;top: -20px;right: -10px;';
+          endTime.className = 'region-time-indicator';
+          this.element.title = this.formatTime(this.start, this.end);
+        }
       }
     }
     /* Bind audio events. */

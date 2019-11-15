@@ -1,5 +1,5 @@
 /*!
- * wavesurfer.js timeline plugin 3.1.0 (2019-11-12)
+ * wavesurfer.js timeline plugin 3.1.0 (2019-11-15)
  * https://github.com/katspaugh/wavesurfer.js
  * @license BSD-3-Clause
  */
