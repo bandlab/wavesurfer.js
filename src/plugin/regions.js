@@ -146,10 +146,12 @@ class Region {
             height: '100%',
             top: '0px'
         });
-        const startTime = `<span id="startTime">${this.start}</span>`;
-        const endTime = `<span id="endTime">${this.end}</span>`;
-        regionEl.insertAdjacentHTML('beforeend', startTime);
-        regionEl.insertAdjacentHTML('beforeend', endTime);
+        if (this.regionTimestamp) {
+            const startTime = `<span id="startTime">${this.start}</span>`;
+            const endTime = `<span id="endTime">${this.end}</span>`;
+            regionEl.insertAdjacentHTML('beforeend', startTime);
+            regionEl.insertAdjacentHTML('beforeend', endTime);
+        }
 
         /* Resize handles */
         if (this.resize) {

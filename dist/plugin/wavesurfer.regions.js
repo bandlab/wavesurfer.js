@@ -1,5 +1,5 @@
 /*!
- * wavesurfer.js regions plugin 3.1.0 (2019-11-15)
+ * wavesurfer.js regions plugin 3.1.0 (2019-11-18)
  * https://github.com/katspaugh/wavesurfer.js
  * @license BSD-3-Clause
  */
@@ -288,11 +288,15 @@ function () {
         height: '100%',
         top: '0px'
       });
-      var startTime = "<span id=\"startTime\">".concat(this.start, "</span>");
-      var endTime = "<span id=\"endTime\">".concat(this.end, "</span>");
-      regionEl.insertAdjacentHTML('beforeend', startTime);
-      regionEl.insertAdjacentHTML('beforeend', endTime);
+
+      if (this.regionTimestamp) {
+        var startTime = "<span id=\"startTime\">".concat(this.start, "</span>");
+        var endTime = "<span id=\"endTime\">".concat(this.end, "</span>");
+        regionEl.insertAdjacentHTML('beforeend', startTime);
+        regionEl.insertAdjacentHTML('beforeend', endTime);
+      }
       /* Resize handles */
+
 
       if (this.resize) {
         var handleLeft = regionEl.appendChild(document.createElement('handle'));

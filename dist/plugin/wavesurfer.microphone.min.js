@@ -1,5 +1,5 @@
 /*!
- * wavesurfer.js microphone plugin 3.1.0 (2019-11-15)
+ * wavesurfer.js microphone plugin 3.1.0 (2019-11-18)
  * https://github.com/katspaugh/wavesurfer.js
  * @license BSD-3-Clause
  */
